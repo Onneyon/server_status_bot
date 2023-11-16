@@ -55,7 +55,7 @@ async def on_ready():
     bot.ready = True
 
 
-@tasks.loop(seconds=5.0)
+@tasks.loop(minutes=5.0)
 async def update_status():
     if not bot.ready:
         return
@@ -72,8 +72,7 @@ async def update_status():
 
         channel = bot.get_channel(int(channel_str))
         if channel:
-            # await channel.edit(topic=f"Players online: {player_count}")
-            print(f"{player_count} players in {channel_str} at {api_url}")
+            await channel.edit(topic=f"Players online: {player_count}")
 
 try:
     bot.run(token)
