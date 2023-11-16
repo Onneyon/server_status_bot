@@ -4,7 +4,7 @@ import urllib.request
 import json
 from yaml import safe_load, dump
 
-from discord.flags import Intents
+# from discord.flags import Intents
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -30,6 +30,10 @@ class myBot(discord.ext.commands.Bot):
         self.servers[channel_str] = api_url
         self.save_config()
 
+    def remove_status(self, channel_str):
+        del self.servers[channel_str]
+        self.save_config()
+
 
 bot = myBot("s!", intents=intents)
 with open("token.txt", "r") as f:
@@ -44,9 +48,22 @@ async def add(ctx, api_url):
 
 
 @add.error
-async def info_error(ctx, error):
+async def add_error(ctx, error):
     if isinstance(error, commands.BadArgument):
-        await ctx.send('Error: bad argument')
+        await ctx.send('Error: this command takes one argument')
+
+
+@bot.command()
+async def remove(ctx):
+    channel_str = str(ctx.message.channel.id)
+    bot.remove_status(channel_str)
+    await ctx.send("Removed player counter from this channel, you are free to edit its description")
+
+
+@remove.error
+async def remove_error(ctx, error):
+    if isinstance(error, commands.BadArgument):
+        await ctx.send('Error: this command does not take an argument')
 
 
 @bot.event
