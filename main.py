@@ -4,8 +4,6 @@ import urllib.request
 import json
 from yaml import safe_load, dump
 
-# from discord.flags import Intents
-
 intents = discord.Intents.default()
 intents.message_content = True
 
