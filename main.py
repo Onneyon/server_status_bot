@@ -21,7 +21,6 @@ class myBot(discord.ext.commands.Bot):
     def load_config(self):
         with open("servers.yaml", "r") as f:
             self.servers = safe_load(f)
-            print(self.servers)
 
     def save_config(self):
         with open("servers.yaml", "w") as f:
@@ -41,6 +40,7 @@ with open("token.txt", "r") as f:
 async def add(ctx, api_url):
     channel_str = str(ctx.message.channel.id)
     bot.add_status(api_url, channel_str)
+    await ctx.send("Added player counter to this channel, status may take up to 5 mins to be updated")
 
 
 @add.error
