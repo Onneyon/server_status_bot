@@ -3,6 +3,7 @@ from discord.ext import tasks, commands
 import urllib.request
 import json
 from yaml import safe_load, dump
+from pathlib import Path
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -17,8 +18,12 @@ class myBot(discord.ext.commands.Bot):
         update_status.start()
 
     def load_config(self):
-        with open("servers.yaml", "r") as f:
-            self.servers = safe_load(f)
+        try:
+            with open("servers.yaml", "r") as f:
+                raw = safe_load(f)
+                self.servers = raw if raw else {}
+        except FileNotFoundError:
+            Path("servers.yaml").touch()
 
     def save_config(self):
         with open("servers.yaml", "w") as f:
